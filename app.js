@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const cors = require("cors");
 
 // ROUTE IMPORTS
 const authRoutes = require("./routes/auth");
@@ -11,12 +12,13 @@ const app = express();
 
 // MIDDLEWARE
 app.use(express.json());
+app.use(cors());
 
 // ROUTES
 app.use("/api", authRoutes);
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/quizzup", {
+  .connect(process.env.DATABASE, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
