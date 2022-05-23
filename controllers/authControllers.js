@@ -24,7 +24,7 @@ exports.signup = async (req, res) => {
       if (user) {
         const { _id, name, email } = user;
         const token = jwt.sign({ _id, name, email }, process.env.JWT_SECRET, {
-          expiresIn: "24h",
+          expiresIn: "48h",
         });
         return res.status(201).json({
           msg: "Signup Successfull!",
@@ -53,7 +53,7 @@ exports.signin = (req, res) => {
 
     const { _id, email, name } = user;
     const token = jwt.sign({ _id, name, email }, process.env.JWT_SECRET, {
-      expiresIn: "24h",
+      expiresIn: "48h",
     });
     if (user.authenticate(password)) {
       return res.status(200).json({
@@ -69,9 +69,11 @@ exports.signin = (req, res) => {
 };
 
 exports.isAuthenticated = (req, res, next) => {
-  const token = req.headers.authorization;
-  if (token) {
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+  const bearerHeader = req.headers.authorization;
+  const bearer = bearerHeader.split(" ");
+  const encodedToken = bearer[1];
+  if (encodedToken) {
+    jwt.verify(encodedToken, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
         return res.status(401).json({
           msg: "Invalid Token",

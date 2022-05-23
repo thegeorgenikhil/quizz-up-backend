@@ -5,6 +5,7 @@ const cors = require("cors");
 
 // ROUTE IMPORTS
 const authRoutes = require("./routes/auth");
+const quizRoutes = require("./routes/quiz");
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(cors());
 
 // ROUTES
 app.use("/api", authRoutes);
+app.use("/api", quizRoutes);
 
 mongoose
   .connect(process.env.DATABASE, {
